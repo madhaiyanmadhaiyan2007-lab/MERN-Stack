@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartLearn Pro - AI-Powered Student Assistant</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-brain"></i>
+                <span>SmartLearn</span>
+            </div>
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="user-profile">
+            <div class="user-avatar-large">
+                <i class="fas fa-user-graduate"></i>
+            </div>
+            <div class="user-name">Student Pro</div>
+            <div class="user-level">
+                <i class="fas fa-star"></i> Level <span id="userLevel">1</span>
+            </div>
+            <div class="xp-bar">
+                <div class="xp-fill" id="xpFill"></div>
+            </div>
+            <div class="xp-text"><span id="currentXP">0</span> / <span id="maxXP">100</span> XP</div>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active" data-page="dashboard">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#" class="nav-item" data-page="ai-assistant">
+                <i class="fas fa-robot"></i>
+                <span>AI Assistant</span>
+                <span class="badge new">NEW</span>
+            </a>
+            <a href="#" class="nav-item" data-page="tasks">
+                <i class="fas fa-tasks"></i>
+                <span>Tasks</span>
+                <span class="badge" id="taskCount">0</span>
+            </a>
+            <a href="#" class="nav-item" data-page="grades">
+                <i class="fas fa-chart-line"></i>
+                <span>Grades & GPA</span>
+            </a>
+            <a href="#" class="nav-item" data-page="flashcards">
+                <i class="fas fa-layer-group"></i>
+                <span>Flashcards</span>
+            </a>
+            <a href="#" class="nav-item" data-page="mindmap">
+                <i class="fas fa-project-diagram"></i>
+                <span>Mind Maps</span>
+            </a>
+            <a href="#" class="nav-item" data-page="focus">
+                <i class="fas fa-spa"></i>
+                <span>Focus Mode</span>
+            </a>
+            <a href="#" class="nav-item" data-page="goals">
+                <i class="fas fa-bullseye"></i>
+                <span>Goals</span>
+            </a>
+            <a href="#" class="nav-item" data-page="achievements">
+                <i class="fas fa-trophy"></i>
+                <span>Achievements</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <button class="btn-icon" id="themeToggle">
+                <i class="fas fa-moon"></i>
+            </button>
+            <button class="btn-icon" id="settingsBtn">
+                <i class="fas fa-cog"></i>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="header-search">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search anything..." id="searchInput">
+            </div>
+            <div class="header-actions">
+                <div class="streak-badge">
+                    <i class="fas fa-fire"></i>
+                    <span id="streakDays">0</span> Day Streak
+                </div>
+                <button class="icon-btn notification-btn" id="notificationBtn">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Dashboard Page -->
+        <section class="page active" id="dashboardPage">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Welcome Back! 🎓</h1>
+                    <p class="page-subtitle" id="greeting">Ready to achieve your goals today?</p>
+                </div>
+                <button class="btn btn-primary" id="quickAddBtn">
+                    <i class="fas fa-plus"></i> Quick Add
+                </button>
+            </div>
+
+            <!-- AI Insights Banner -->
+            <div class="ai-insights-banner">
+                <div class="ai-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="ai-content">
+                    <h3>AI Insight</h3>
+                    <p id="aiInsight">You've been most productive on Wednesdays. Try scheduling important tasks then!</p>
+                </div>
+                <button class="btn-link" onclick="switchPage('ai-assistant')">View More →</button>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card gradient-1">
+                    <div class="stat-content">
+                        <div class="stat-label">Total Tasks</div>
+                        <div class="stat-value" id="totalTasks">0</div>
+                        <div class="stat-change">
+                            <i class="fas fa-arrow-up"></i> 12% this week
+                        </div>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                </div>
+                
+                <div class="stat-card gradient-2">
+                    <div class="stat-content">
+                        <div class="stat-label">Current GPA</div>
+                        <div class="stat-value" id="currentGPA">0.0</div>
+                        <div class="stat-change">
+                            <i class="fas fa-arrow-up"></i> +0.2 points
+                        </div>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                </div>
+                
+                <div class="stat-card gradient-3">
+                    <div class="stat-content">
+                        <div class="stat-label">Study Hours</div>
+                        <div class="stat-value" id="studyHours">0</div>
+                        <div class="stat-change">
+                            <i class="fas fa-arrow-up"></i> This week
+                        </div>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                </div>
+                
+                <div class="stat-card gradient-4">
+                    <div class="stat-content">
+                        <div class="stat-label">Achievements</div>
+                        <div class="stat-value" id="achievementCount">0</div>
+                        <div class="stat-change">
+                            <i class="fas fa-trophy"></i> Unlocked
+                        </div>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-award"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Grid -->
+            <div class="dashboard-grid">
+                <!-- Today's Focus -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-crosshairs"></i> Today's Focus</h2>
+                        <button class="btn-link" onclick="switchPage('tasks')">View All</button>
+                    </div>
+                    <div class="focus-list" id="todayFocus">
+                        <div class="empty-state">
+                            <i class="fas fa-clipboard-check"></i>
+                            <p>No tasks for today</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Study Progress -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-chart-pie"></i> Weekly Progress</h2>
+                    </div>
+                    <div class="progress-display">
+                        <canvas id="progressChart" width="200" height="200"></canvas>
+                        <div class="progress-stats">
+                            <div class="progress-item">
+                                <span class="dot" style="background: #667eea;"></span>
+                                <span>Completed</span>
+                                <strong id="completedTasks">0</strong>
+                            </div>
+                            <div class="progress-item">
+                                <span class="dot" style="background: #f59e0b;"></span>
+                                <span>In Progress</span>
+                                <strong id="inProgressTasks">0</strong>
+                            </div>
+                            <div class="progress-item">
+                                <span class="dot" style="background: #ef4444;"></span>
+                                <span>Overdue</span>
+                                <strong id="overdueTasks">0</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upcoming Deadlines -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-exclamation-triangle"></i> Urgent Deadlines</h2>
+                    </div>
+                    <div class="deadline-list" id="urgentDeadlines">
+                        <div class="empty-state">
+                            <i class="fas fa-calendar-check"></i>
+                            <p>No urgent deadlines</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Achievements -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-trophy"></i> Recent Achievements</h2>
+                        <button class="btn-link" onclick="switchPage('achievements')">View All</button>
+                    </div>
+                    <div class="achievement-showcase" id="recentAchievements">
+                        <div class="empty-state">
+                            <i class="fas fa-medal"></i>
+                            <p>Complete tasks to earn achievements!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Assistant Page -->
+        <section class="page" id="ai-assistantPage">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">AI Study Assistant 🤖</h1>
+                    <p class="page-subtitle">Your intelligent learning companion</p>
+                </div>
+            </div>
+
+            <div class="ai-chat-container">
+                <div class="ai-suggestions">
+                    <h3>Quick Actions</h3>
+                    <div class="suggestion-grid">
+                        <button class="suggestion-btn" data-prompt="Analyze my study patterns">
+                            <i class="fas fa-chart-line"></i>
+                            Analyze Study Patterns
+                        </button>
+                        <button class="suggestion-btn" data-prompt="Suggest study schedule">
+                            <i class="fas fa-calendar-alt"></i>
+                            Suggest Schedule
+                        </button>
+                        <button class="suggestion-btn" data-prompt="Review my progress">
+                            <i class="fas fa-tasks"></i>
+                            Review Progress
+                        </button>
+                        <button class="suggestion-btn" data-prompt="Study tips">
+                            <i class="fas fa-lightbulb"></i>
+                            Get Study Tips
+                        </button>
+                    </div>
+                </div>
+
+                <div class="ai-chat-box" id="aiChatBox">
+                    <div class="ai-message">
+                        <div class="ai-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="message-content">
+                            <p>Hello! I'm your AI Study Assistant. I can help you analyze your study patterns, suggest improvements, and keep you motivated. How can I assist you today?</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ai-input-area">
+                    <input type="text" id="aiInput" placeholder="Ask me anything about your studies...">
+                    <button class="btn btn-primary" id="aiSendBtn">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tasks Page -->
+        <section class="page" id="tasksPage">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Task Management</h1>
+                    <p class="page-subtitle">Organize and track your assignments</p>
+                </div>
+                <button class="btn btn-primary" id="addTaskBtn">
+                    <i class="fas fa-plus"></i> New Task
+                </button>
+            </div>
+
+            <div class="filter-tabs">
+                <button class="filter-tab active" data-filter="all">All</button>
+                <button class="filter-tab" data-filter="today">Today</button>
+                <button class="filter-tab" data-filter="week">This Week</button>
+                <button class="filter-tab" data-filter="high">High Priority</button>
+                <button class="filter-tab" data-filter="completed">Completed</button>
+            </div>
+
+            <div class="tasks-container" id="tasksContainer">
+                <div class="empty-state">
+                    <i class="fas fa-tasks"></i>
+                    <p>No tasks yet. Create your first task!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Grades & GPA Page -->
+        <section class="page" id="gradesPage">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Grades & GPA Tracker</h1>
+                    <p class="page-subtitle">Monitor your academic performance</p>
+                </div>
+                <button class="btn btn-primary" id="addGradeBtn">
+                    <i class="fas fa-plus"></i> Add Grade
+                </button>
+            </div>
+
+            <div class="gpa-overview">
+                <div class="gpa-card">
+                    <h2>Current GPA</h2>
+                    <div class="gpa-value" id="gpaDisplay">0.00</div>
+                    <div class="gpa-scale">Scale: 4.0</div>
+                </div>
+                <div class="gpa-chart">
+                    <h3>GPA Trend</h3>
+                    <canvas id="gpaChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+
+            <div class="grades-grid" id="gradesGrid">
+                <div class="empty-state">
+                    <i class="fas fa-graduation-cap"></i>
+                    <p>No grades recorded yet</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Flashcards Page -->
+        <section class="page" id="flashcardsPage">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Flashcard Decks</h1>
+                    <p class="page-subtitle">Learn with spaced repetition</p>
+                </div>
+                <button class="btn btn-primary" id="addDeckBtn">
+                    <i class="fas fa-plus"></i> New Deck
+                </button>
+            </div>
+
+            <div class="decks-grid" id="decksGrid">
+                <div class="empty-state">
+                    <i class="fas fa-layer-group"></i>
+                    <p>Create your first flashcard deck!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mind Map Page -->
+        <section class="page" id="mindmapPage">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Mind Maps</h1>
+                    <p class="page-subtitle">Visualize your ideas</p>
+                </div>
+                <div>
+                    <button class="btn btn-outline" id="addNodeBtn">
+                        <i class="fas fa-plus"></i> Add Node
+                    </button>
+                    <button class="btn btn-primary" id="newMindmapBtn">
+                        <i class="fas fa-project-diagram"></i> New Map
+                    </button>
+                </div>
+            </div>
+
+            <div class="mindmap-canvas" id="mindmapCanvas">
+                <div class="mindmap-placeholder">
+                    <i class="fas fa-project-diagram"></i>
+                    <p>Create a new mind map to get started</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Focus Mode Page -->
+        <section class="page" id="focusPage">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Focus Mode</h1>
+                    <p class="page-subtitle">Concentrate with ambient sounds</p>
+                </div>
+            </div>
+
+            <div class="focus-container">
+                <div class="timer-card">
+                    <h2>Pomodoro Timer</h2>
+                    <div class="timer-display-large">
+                        <span id="timerDisplay">25:00</span>
+                    </div>
+                    <div class="timer-controls">
+                        <button class="btn btn-lg" id="startTimer">
+                            <i class="fas fa-play"></i> Start
+                        </button>
+                        <button class="btn btn-outline" id="resetTimer">
+                            <i class="fas fa-redo"></i> Reset
+                        </button>
+                    </div>
+                    <div class="timer-presets">
+                        <button class="timer-preset active" data-minutes="25">25 min</button>
+                        <button class="timer-preset" data-minutes="45">45 min</button>
+                        <button class="timer-preset" data-minutes="5">5 min</button>
+                    </div>
+                </div>
+
+                <div class="ambient-sounds">
+                    <h2><i class="fas fa-music"></i> Ambient Sounds</h2>
+                    <div class="sounds-grid">
+                        <div class="sound-card" data-sound="rain">
+                            <i class="fas fa-cloud-rain"></i>
+                            <span>Rain</span>
+                            <div class="sound-toggle"></div>
+                        </div>
+                        <div class="sound-card" data-sound="ocean">
+                            <i class="fas fa-water"></i>
+                            <span>Ocean</span>
+                            <div class="sound-toggle"></div>
+                        </div>
+                        <div class="sound-card" data-sound="forest">
+                            <i class="fas fa-tree"></i>
+                            <span>Forest</span>
+                            <div class="sound-toggle"></div>
+                        </div>
+                        <div class="sound-card" data-sound="cafe">
+                            <i class="fas fa-coffee"></i>
+                            <span>Café</span>
+                            <div class="sound-toggle"></div>
+                        </div>
+                        <div class="sound-card" data-sound="fireplace">
+                            <i class="fas fa-fire"></i>
+                            <span>Fireplace</span>
+                            <div class="sound-toggle"></div>
+                        </div>
+                        <div class="sound-card" data-sound="whitenoise">
+                            <i class="fas fa-wind"></i>
+                            <span>White Noise</span>
+                            <div class="sound-toggle"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Goals Page -->
+        <section class="page" id="goalsPage">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Goals & Milestones</h1>
+                    <p class="page-subtitle">Track your progress toward success</p>
+                </div>
+                <button class="btn btn-primary" id="addGoalBtn">
+                    <i class="fas fa-plus"></i> New Goal
+                </button>
+            </div>
+
+            <div class="goals-grid" id="goalsGrid">
+                <div class="empty-state">
+                    <i class="fas fa-bullseye"></i>
+                    <p>Set your first goal and start achieving!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Achievements Page -->
+        <section class="page" id="achievementsPage">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Achievements & Badges 🏆</h1>
+                    <p class="page-subtitle">Your learning journey milestones</p>
+                </div>
+            </div>
+
+            <div class="achievements-stats">
+                <div class="achievement-stat">
+                    <i class="fas fa-trophy"></i>
+                    <div>
+                        <strong id="unlockedCount">0</strong>
+                        <span>Unlocked</span>
+                    </div>
+                </div>
+                <div class="achievement-stat">
+                    <i class="fas fa-lock"></i>
+                    <div>
+                        <strong id="lockedCount">15</strong>
+                        <span>Locked</span>
+                    </div>
+                </div>
+                <div class="achievement-stat">
+                    <i class="fas fa-percentage"></i>
+                    <div>
+                        <strong id="completionPercent">0%</strong>
+                        <span>Completion</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="achievements-grid" id="achievementsGrid"></div>
+        </section>
+    </main>
+
+    <!-- Modals -->
+    <!-- Task Modal -->
+    <div class="modal" id="taskModal">
+        <div class="modal-overlay" onclick="closeModal('taskModal')"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Task</h2>
+                <button class="modal-close" onclick="closeModal('taskModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="taskForm">
+                <div class="form-group">
+                    <label>Task Title *</label>
+                    <input type="text" id="taskTitle" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="taskDescription" rows="3"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select id="taskCategory">
+                            <option value="assignment">Assignment</option>
+                            <option value="exam">Exam</option>
+                            <option value="project">Project</option>
+                            <option value="reading">Reading</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Priority</label>
+                        <select id="taskPriority">
+                            <option value="low">Low</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Due Date</label>
+                        <input type="date" id="taskDueDate">
+                    </div>
+                    <div class="form-group">
+                        <label>Estimated Hours</label>
+                        <input type="number" id="taskHours" min="0.5" step="0.5" value="1">
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline" onclick="closeModal('taskModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Task</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Grade Modal -->
+    <div class="modal" id="gradeModal">
+        <div class="modal-overlay" onclick="closeModal('gradeModal')"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Grade</h2>
+                <button class="modal-close" onclick="closeModal('gradeModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="gradeForm">
+                <div class="form-group">
+                    <label>Course Name *</label>
+                    <input type="text" id="courseName" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Grade *</label>
+                        <select id="gradeValue">
+                            <option value="4.0">A (4.0)</option>
+                            <option value="3.7">A- (3.7)</option>
+                            <option value="3.3">B+ (3.3)</option>
+                            <option value="3.0">B (3.0)</option>
+                            <option value="2.7">B- (2.7)</option>
+                            <option value="2.3">C+ (2.3)</option>
+                            <option value="2.0">C (2.0)</option>
+                            <option value="1.7">C- (1.7)</option>
+                            <option value="1.0">D (1.0)</option>
+                            <option value="0.0">F (0.0)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Credits</label>
+                        <input type="number" id="courseCredits" min="1" max="6" value="3">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Semester</label>
+                    <input type="text" id="courseSemester" placeholder="e.g., Fall 2024">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline" onclick="closeModal('gradeModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Grade</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Flashcard Deck Modal -->
+    <div class="modal" id="deckModal">
+        <div class="modal-overlay" onclick="closeModal('deckModal')"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Create Flashcard Deck</h2>
+                <button class="modal-close" onclick="closeModal('deckModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="deckForm">
+                <div class="form-group">
+                    <label>Deck Name *</label>
+                    <input type="text" id="deckName" required>
+                </div>
+                <div class="form-group">
+                    <label>Subject</label>
+                    <input type="text" id="deckSubject">
+                </div>
+                <div class="form-group">
+                    <label>Add Cards</label>
+                    <div id="cardsContainer">
+                        <div class="card-input">
+                            <input type="text" placeholder="Front" class="card-front">
+                            <input type="text" placeholder="Back" class="card-back">
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-outline" id="addCardBtn">
+                        <i class="fas fa-plus"></i> Add Card
+                    </button>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline" onclick="closeModal('deckModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Deck</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Goal Modal -->
+    <div class="modal" id="goalModal">
+        <div class="modal-overlay" onclick="closeModal('goalModal')"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Set New Goal</h2>
+                <button class="modal-close" onclick="closeModal('goalModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="goalForm">
+                <div class="form-group">
+                    <label>Goal Title *</label>
+                    <input type="text" id="goalTitle" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="goalDescription" rows="3"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Target Date</label>
+                        <input type="date" id="goalDate">
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select id="goalCategory">
+                            <option value="academic">Academic</option>
+                            <option value="skill">Skill</option>
+                            <option value="personal">Personal</option>
+                            <option value="career">Career</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline" onclick="closeModal('goalModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Goal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
